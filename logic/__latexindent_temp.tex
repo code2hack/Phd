@@ -1,0 +1,225 @@
+\documentclass{article}
+\usepackage{notes}
+\newcommand{\page}[1]{\linkout{book_Ebbinghaus}{#1}}
+
+\title{Mathematical Logic}
+\author{Code2Hack}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\subsection{An Example from Group Theory}
+
+\begin{axiom}{\it Group theory}
+    A {\it group} is a triple $(G, \circ^G, e^G)$ which satisfies:
+    \begin{itemize}
+        \item (G1) For all $x,y,z: \quad (x \circ y) \circ z = x \circ (y \circ z)$
+        \item (G2) For all $x: \quad x \circ e = x$
+        \item (G3) For every $x$ there is a $y$ such that $x \circ y = e$
+    \end{itemize}
+\end{axiom}
+
+\subsection{An Example from the Theory of Equivalence Relations}
+
+\begin{axiom}{Theory of equivalence relations}
+    The pair $(A, R^A)$:
+    \begin{itemize}
+        \item (E1) $xRx$.
+        \item (E2) If $xRy$ then $yRx$.
+        \item (E3) If $xRy$ and $yRz$ then $xRz$.
+    \end{itemize}
+\end{axiom}
+
+\subsection{A Preliminary Analysis}
+
+A few important points:
+\begin{enumerate}
+    \item Is every proposition $\psi$ which {\bf follows from} $\Phi$ also {\bf provable from} $\Phi$?
+    \begin{freebox}{Remark:\it Godel's Completeness Theorem.}
+        If not, the axioms are not complete/sufficient?
+
+        {\color{green}Yes}, this is exactly the content of {\it Godel's Completeness Theorem.}
+    \end{freebox}
+    \item The concept {\it follows from(the Consequence Relation)}.
+    \item The concept {\it proof}: {\it inferences} from the axioms to the proposition.
+        \begin{itemize}
+            \item {\it Connectives}.
+            \item {\it Quantifiers}.
+            \item {\it Rules}.
+        \end{itemize}
+\end{enumerate}
+
+\subsection{Preview}
+\begin{itemize}
+    \item Godel's Completeness Theorem forms a bridge between syntax and semantics.(Chapter VI)
+    \item The consistancy of mathematics or a justification of rules of inference.(Chapter VII X)
+    \item Proofs by computers.(Chapter X)
+    \item {\it Logic programming}: the starting point of AI.(Chapter XI)
+\end{itemize}
+
+
+\section{Syntax of First-Order Languages}
+
+\subsection{Alphabets}
+$A^*$ denotes the set of all strings over $A$.
+
+\begin{lemma}{Countability}
+    For a nonempty set $M$, the following are equivalent:
+    \begin{itemize}
+        \item (a) M is at most countable.
+        \item (b) There is a surjective map $\alpha:\mathbf{N} \rightarrow M$.
+        \item (c) There is an injective map $\beta:M \rightarrow \mathbf{N}$.
+    \end{itemize}
+    
+    \begin{freebox}{Proof}
+        Hints.\page{20}
+        \begin{enumerate}
+            \item (a)\to(b): by the definition of countability.
+            \item (b)\to(c): the least index.
+            \item (c)\to(a): by ranking of the images under $\beta$.
+        \end{enumerate}
+    \end{freebox}
+    \begin{freebox}{Remark}
+        \begin{itemize}
+            \item The subset of a countable set is also countable.
+            \item The union of two countable sets is also countable.
+            \item Alphabet could be finite, countable or uncountable(VII.4 \page{116}).
+        \end{itemize}
+    \end{freebox}
+\end{lemma}
+
+\begin{lemma}{Countability of $\mathcal{A}^*$}
+    If alphabet $\mathcal{A}$ is at most countable, then $\mathcal{A}^*$ is countable.
+    \begin{freebox}{Proof.{\page{21}}}
+        \begin{enumerate}
+            \item Define a map $\beta: \mathcal{A}^* \to \mathbf{N}$.
+            \item Prove $\beta$ is injective by {\it the foundamental theorem of arithmetic}.
+        \end{enumerate}
+    \end{freebox}
+\end{lemma}
+
+\subsection{The Alphabet of a First-Order Language}
+First, review the three important concepts:
+\begin{itemize}
+    \item Connectives.
+    \item Quantifiers.
+    \item Equality relation.
+\end{itemize}
+
+\begin{definition}{Alphabet of first-order language}
+\begin{multicols}{2}
+    [
+        The alphabet of first-order language is $\mathcal{A}_S := \mathcal{A} \cup S$.
+    ]
+    The set $\mathcal{A}$:
+    \begin{itemize}
+        \item (a) $v_0, v_1,\dots$(variables);
+        \item (b) $\lnot, \land, \lor, \rightarrow, \leftrightarrow$;
+        \item (c) $\forall, \exists$;
+        \item (d) $\equiv$;
+        \item (e) ),(;
+    \end{itemize}
+\columnbreak
+    The {\color{red}\it symbol set} $S$, which determines the first-order language.(???)
+    \begin{enumerate}
+        \item {\it n-ary relation symbols.}
+        \item {\it n-ary function symbols.}
+        \item a set of constants.
+    \end{enumerate}
+\end{multicols}
+\begin{freebox}{Remark}
+    A first-order language is determined by the symbol set $S$ because {\color{green} $S$ determines the way that terms, formulas are formed(syntax)}
+\end{freebox}
+
+\end{definition}
+
+\subsection{Terms and Formulas in First-Order Languages}
+
+\begin{definition}{\it S-term \page{23}}
+    \begin{itemize}
+        \item (T1) Every variable.
+        \item (T2) Every constant.
+        \item (T3) If the strings $t_1,\dots,t_n$ are $S-terms$, then $ft_1 \dots t_n$ is also an $S-term$.
+    \end{itemize}
+    We denote the set of $S-terms$ by $T^S$.
+\end{definition}
+
+\begin{definition}{\it S-formulas \page{24}}
+    \begin{itemize}
+        \item (F1) $t_1 \equiv t_2$.
+        \item (F2) $Rt_1 \dots t_n$.
+        \item (F3) If $\psi$ is an $S-formula$, so is $\lnot \psi$.
+        \item (F4) If $\psi$ and $\phi$ are $S-formulas$, so are $(\psi \land \phi),(\psi \lor \phi),(\psi \rightarrow \phi),(\psi \leftrightarrow \phi)$.
+        \item (F5) If $\psi$ is an $S-term$ and $x$ is a variable, then $\forall x \psi$ and $\exists x \psi$ are $S-formulas$.
+    \end{itemize}
+    We denote the set of $S-formulas$ by $L^S$.
+\end{definition}
+
+\begin{freebox}{Remark: Difference between $\equiv$ and binary relation$R$}
+    Why isn't $\equiv$ included in the binary relations?
+\end{freebox}
+
+\begin{lemma}{Countability of $T^S$ and $L^S$}
+    If $S$ is at most countable, then $T^S$ and $L^S$ are countable.
+\end{lemma}
+
+\subsection{Induction in the Calculus of Terms and in the Calculus of Formulas \page{27}}
+
+\begin{definition}{\it Induction over $\mathfrak{C}$}
+    Let $S$ be a symbol set and let $Z \subset \mathcal{A}^*_S$ be a set of strings over $\mathcal{A}_S$. To describe the elements of $Z$ by means of a calculus $\mathfrak{C}$, we formally write the rules as:
+    \[
+        \frac{\zeta_1,\dots,\zeta_n}{\zeta}
+    \]
+
+    \begin{freebox}{Example: Rewrite the definition of $S-term$ \ref{2.3.1}}
+        Here the set $Z = T^s$.
+        \begin{itemize}
+            \item (T1) $\frac{\qquad}{x}$;
+            \item (T2) $\frac{\qquad}{c}$ if $c \in S$;
+            \item (T3) $\frac{t_1,\dots,t_n}{ft_1 \dots t_n}$ if $f \in S$ and $f$ is n-ary.
+        \end{itemize}
+    \end{freebox}
+\end{definition}
+
+    \begin{freebox}{Proof by induction on terms \page{28}}
+%        \begin{itemize}
+%            \item (T1)' Every variable has the property $P$.
+%            \item (T2)' Every constant in $S$ has the property $P$.
+%            \item (T3)' 
+%        \end{itemize}
+    \end{freebox}
+
+    \begin{freebox}{Proof by induction on formulas \page{28}}
+    \end{freebox}
+
+    \begin{freebox}{Example}
+        \begin{itemize}
+            \item (a) For all symbol sets $S$, the empty string $\square$ is neighter an $S-term$ nor an $S-formula$.
+            \item (b) (1) $\circ$ is not an $S_{gr}-term$. 
+                      (2) $\circ \circ v_1$ is not an $S_{gr}-term$.
+            \item (c) For all symbol sets $S$, every $S-formula$ contains the same number of the left and right parentheses.
+        \end{itemize}
+
+        \begin{freebox}{\it Proof. \page{28}}
+            \begin{itemize}
+                \item (a) Let $P$ be the property on $\mathcal{A}_S^*$ which holds for a string $\zeta$ iff $\zeta$ is nonempty.
+                \item (b) $P$ on $\mathcal{A}_S^*$ holds for a string $\zeta$ over $\mathcal{A}_S$ iff $\zeta$ is distinct from (1) $\circ$; (2) $\circ \circ v_1$.
+                \item (c) 
+            \end{itemize}
+        \end{freebox}
+    \end{freebox}
+
+    \begin{lemma}{Initial segment of the terms and formulas.}
+        \begin{itemize}
+            \item (a) For all terms $t$ and $t'$, $t$ is not a proper initial segment of $t'$.
+            \item (b) For all formulas $\varphi$ and $\varphi '$, $\varphi$ is not an initial segement of $\varphi '$.
+        \end{itemize}
+        \begin{freebox}{Proof. \page{29}}
+            \item (a) $P$: 
+        \end{freebox}
+    \end{lemma}
+
+
+\end{document}

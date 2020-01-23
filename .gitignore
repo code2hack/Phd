@@ -1,0 +1,13 @@
+*
+!/**/
+!note*.pdf
+!book*.pdf
+!*.tex
+!*.cls
+!*.sty
+!*.bib
+!*.md
+!.gitignore
+!*.code-workspace
+!*.sty*
+!*.code-snippets

@@ -1,0 +1,991 @@
+\documentclass{article}
+\usepackage{notes}
+\setlength{\columnseprule}{0.4pt}
+\renewcommand{\columnseprulecolor}{\color{blue}}
+%\colseprulecolor{\color{blue}}
+\newcommand{\page}[1]{\linkout{book_Ebbinghaus}{#1}}
+
+\title{Mathematical Logic}
+\author{Code2Hack}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\subsection{An Example from Group Theory}
+
+\begin{axiom}{Group theory}
+    A {\it group} is a triple $(G, \circ^G, e^G)$ which satisfies:
+    \begin{itemize}
+        \item (G1) For all $x,y,z: \quad (x \circ y) \circ z = x \circ (y \circ z)$
+        \item (G2) For all $x: \quad x \circ e = x$
+        \item (G3) For every $x$ there is a $y$ such that $x \circ y = e$
+    \end{itemize}
+\end{axiom}
+
+\subsection{An Example from the Theory of Equivalence Relations}
+
+\begin{axiom}{Theory of equivalence relations}
+    The pair $(A, R^A)$:
+    \begin{itemize}
+        \item (E1) $xRx$.
+        \item (E2) If $xRy$ then $yRx$.
+        \item (E3) If $xRy$ and $yRz$ then $xRz$.
+    \end{itemize}
+\end{axiom}
+
+\subsection{A Preliminary Analysis}
+
+A few important points:
+\begin{enumerate}
+    \item Is every proposition $\psi$ which {\bf follows from} $\Phi$ also {\bf provable from} $\Phi$?
+    \begin{freebox}{Remark:\it Godel's Completeness Theorem.}
+        If not, the axioms are not complete/sufficient?
+
+        {\color{green}Yes}, this is exactly the content of {\it Godel's Completeness Theorem.}
+    \end{freebox}
+    \item The concept {\it follows from(the Consequence Relation)}.
+    \item The concept {\it proof}: {\it inferences} from the axioms to the proposition.
+        \begin{itemize}
+            \item {\it Connectives}.
+            \item {\it Quantifiers}.
+            \item {\it Rules}.
+        \end{itemize}
+\end{enumerate}
+
+\subsection{Preview}
+\begin{itemize}
+    \item Godel's Completeness Theorem forms a bridge between syntax and semantics.(Chapter VI)
+    \item The consistancy of mathematics or a justification of rules of inference.(Chapter VII X)
+    \item Proofs by computers.(Chapter X)
+    \item {\it Logic programming}: the starting point of AI.(Chapter XI)
+\end{itemize}
+
+
+\section{Syntax of First-Order Languages}
+
+\subsection{Alphabets}
+$A^*$ denotes the set of all strings over $A$.
+
+\begin{lemma}{Countability}
+    For a nonempty set $M$, the following are equivalent:
+    \begin{itemize}
+        \item (a) M is at most countable.
+        \item (b) There is a surjective map $\alpha:\mathbf{N} \rightarrow M$.
+        \item (c) There is an injective map $\beta:M \rightarrow \mathbf{N}$.
+    \end{itemize}
+    
+    \begin{freebox}{Proof}
+        Hints.\page{20}
+        \begin{enumerate}
+            \item (a)\to(b): by the definition of countability.
+            \item (b)\to(c): the least index.
+            \item (c)\to(a): by ranking of the images under $\beta$.
+        \end{enumerate}
+    \end{freebox}
+    \begin{freebox}{Remark}
+        \begin{itemize}
+            \item The subset of a countable set is also countable.
+            \item The union of two countable sets is also countable.
+            \item Alphabet could be finite, countable or uncountable(VII.4 \page{116}).
+        \end{itemize}
+    \end{freebox}
+\end{lemma}
+
+\begin{lemma}{Countability of $\mathcal{A}^*$}
+    If alphabet $\mathcal{A}$ is at most countable, then $\mathcal{A}^*$ is countable.
+    \begin{freebox}{Proof.{\page{21}}}
+        \begin{enumerate}
+            \item Define a map $\beta: \mathcal{A}^* \to \mathbf{N}$.
+            \item Prove $\beta$ is injective by {\it the foundamental theorem of arithmetic}.
+        \end{enumerate}
+    \end{freebox}
+\end{lemma}
+
+\subsection{The Alphabet of a First-Order Language}
+First, review the three important concepts:
+\begin{itemize}
+    \item Connectives.
+    \item Quantifiers.
+    \item Equality relation.
+\end{itemize}
+
+\begin{definition}{Alphabet of first-order language}
+\begin{multicols}{2}
+    [
+        The alphabet of first-order language is $\mathcal{A}_S := \mathcal{A} \cup S$.
+    ]
+    The set $\mathcal{A}$:
+    \begin{itemize}
+        \item (a) $v_0, v_1,\dots$(variables);
+        \item (b) $\lnot, \land, \lor, \rightarrow, \leftrightarrow$;
+        \item (c) $\forall, \exists$;
+        \item (d) $\equiv$;
+        \item (e) ),(;
+    \end{itemize}
+\columnbreak
+    The {\color{red}\it symbol set} $S$, which determines the first-order language.(???)
+    \begin{enumerate}
+        \item {\it n-ary relation symbols.}
+        \item {\it n-ary function symbols.}
+        \item a set of constants.
+    \end{enumerate}
+\end{multicols}
+\begin{freebox}{Remark}
+    A first-order language is determined by the symbol set $S$ because {\color{green} $S$ determines the way that terms, formulas are formed(syntax)}
+\end{freebox}
+
+\end{definition}
+
+\subsection{Terms and Formulas in First-Order Languages}
+
+\begin{definition}{S-term \page{23}}
+    \begin{itemize}
+        \item (T1) Every variable.
+        \item (T2) Every constant.
+        \item (T3) If the strings $t_1,\dots,t_n$ are $S-terms$, then $ft_1 \dots t_n$ is also an $S-term$.
+    \end{itemize}
+    We denote the set of $S-terms$ by $T^S$.
+\end{definition}
+
+\begin{definition}{S-formulas \page{24}}
+    \begin{itemize}
+        \item (F1) $t_1 \equiv t_2$.
+        \item (F2) $Rt_1 \dots t_n$.
+        \item (F3) If $\psi$ is an $S-formula$, so is $\lnot \psi$.
+        \item (F4) If $\psi$ and $\phi$ are $S-formulas$, so are $(\psi \land \phi),(\psi \lor \phi),(\psi \rightarrow \phi),(\psi \leftrightarrow \phi)$.
+        \item (F5) If $\psi$ is an $S-term$ and $x$ is a variable, then $\forall x \psi$ and $\exists x \psi$ are $S-formulas$.
+    \end{itemize}
+    We denote the set of $S-formulas$ by $L^S$.
+\end{definition}
+
+\begin{freebox}{Remark: Difference between $\equiv$ and binary relation$R$}
+    Why isn't $\equiv$ included in the binary relations?
+\end{freebox}
+
+\begin{lemma}{Countability of $T^S$ and $L^S$}
+    If $S$ is at most countable, then $T^S$ and $L^S$ are countable.
+\end{lemma}
+
+\subsection{Induction in the Calculus of Terms and in the Calculus of Formulas}\page{27}
+
+\begin{definition}{Induction over $\mathfrak{C}$}
+    Let $S$ be a symbol set and let $Z \subset \mathcal{A}^*_S$ be a set of strings over $\mathcal{A}_S$. To describe the elements of $Z$ by means of a calculus $\mathfrak{C}$, we formally write the rules as:
+    \[
+        \frac{\zeta_1,\dots,\zeta_n}{\zeta}
+    \]
+
+    \begin{freebox}{Example: Rewrite the definition of $S-term$ \ref{2.3.1}}
+        Here the set $Z = T^s$.
+        \begin{itemize}
+            \item (T1) $\frac{\qquad}{x}$;
+            \item (T2) $\frac{\qquad}{c}$ if $c \in S$;
+            \item (T3) $\frac{t_1,\dots,t_n}{ft_1 \dots t_n}$ if $f \in S$ and $f$ is n-ary.
+        \end{itemize}
+    \end{freebox}
+\end{definition}
+
+    \begin{freebox}{Proof by induction on terms \page{28}}
+%        \begin{itemize}
+%            \item (T1)' Every variable has the property $P$.
+%            \item (T2)' Every constant in $S$ has the property $P$.
+%            \item (T3)' 
+%        \end{itemize}
+    \end{freebox}
+
+    \begin{freebox}{Proof by induction on formulas \page{28}}
+    \end{freebox}
+
+    \begin{freebox}{Example}
+        \begin{itemize}
+            \item (a) For all symbol sets $S$, the empty string $\square$ is neighter an $S-term$ nor an $S-formula$.
+            \item (b) (1) $\circ$ is not an $S_{gr}-term$. 
+                      (2) $\circ \circ v_1$ is not an $S_{gr}-term$.
+            \item (c) For all symbol sets $S$, every $S-formula$ contains the same number of the left and right parentheses.
+        \end{itemize}
+
+        \begin{freebox}{\it Proof. \page{28}}
+            \begin{itemize}
+                \item (a) Let $P$ be the property on $\mathcal{A}_S^*$ which holds for a string $\zeta$ iff $\zeta$ is nonempty.
+                \item (b) $P$ on $\mathcal{A}_S^*$ holds for a string $\zeta$ over $\mathcal{A}_S$ iff $\zeta$ is distinct from (1) $\circ$; (2) $\circ \circ v_1$.
+                \item (c) 
+            \end{itemize}
+        \end{freebox}
+    \end{freebox}
+
+\begin{lemma}{Initial segment}
+        \begin{itemize}
+            \item (a) For all terms $t$ and $t'$, $t$ is not a proper initial segment of $t'$.
+            \item (b) For all formulas $\varphi$ and $\varphi '$, $\varphi$ is not an initial segement of $\varphi '$.
+        \end{itemize}
+        \begin{freebox}{Proof. \page{29}}
+            Proper $P$ holds for a string $\eta$ iff for all terms $t'$, $t'$ is not a proper initial segement of $\eta$ and $\eta$ is not an initial segment of $t'$.
+            \begin{enumerate}
+                \item $t=x$ or $t=c$.
+                \item $t = ft_1 \dots t_n$ and $P$ holds for  $t_1, \dots, t_n$.
+            \end{enumerate}
+             
+        \end{freebox}
+        \begin{freebox}{\color{red}Question}
+            Is this second-order language?
+%                $\forall t \forall \eta ( P \eta \leftrightarrow (Qt \rightarrow \lnot(Rt\eta \lor R\eta t)))$
+            $\forall t \forall t' ( (Pt \land Pt') \rightarrow \lnot(Rtt' \lor Rt't)))$
+        \end{freebox}
+\end{lemma}
+
+\begin{lemma}{}
+    \begin{itemize}
+        \item (a) If $t_1,\dots,t_n = t_1',\dots,t_m'$, then $n=m$ and $t_i = t_i'$ for $1 \leq i \leq n$.
+        \item (b) The same as (a) for formulas.
+    \end{itemize}
+\end{lemma}
+
+\begin{theorem}{Unique Decomposition \page{30}}
+
+\end{theorem}
+
+\begin{definition}{Two important functions: Var and SF \page{31}}
+    \begin{multicols}{2}
+        Var for {\it variable}   
+        \begin{align*}
+            var(x) \: &:= \: \{x\} \\
+            var(c) \: &:= \: \emptyset \\
+            var(ft_1 \dots t_n) \: &:= \: var(t_1) \cup \dots var(t_n)
+        \end{align*}
+
+    \columnbreak
+
+        SF for {\it subformulas}:
+        \begin{align*}
+            SF(t_1 \equiv t_2) \: &:= \: \{t_1 \equiv t_2 \} \\
+            SF(Rt_1 \dots t_n) \: &:= \: \{Rt_1 \dots t_n \} \\
+            SF(\lnot \epsilon) \: &:= \: \{ \lnot \varphi \} \cup SF(\varphi)
+        \end{align*}
+        
+    \end{multicols}
+\end{definition}
+
+
+\subsection{Free Variables and Sentences}\page{32}
+
+\begin{definition}{Free variables in an $S-term$}
+    \begin{align*}
+        free(t_1 \equiv t_2) \: &:= \: var(t_1) \cup var(t_2) \\
+        free(Pt_1 \dots t_n) \: &:= \: var(t_1) \cup \dots var(t_n) \\
+        free(\lnot \varphi)  \: &:= \: free(\varphi) \\
+        free((\varphi*\psi))\: &:= \: free(\varphi) \cup free(psi) for * = \land,\lnot,\rightarrow,\leftrightarrow \\
+        free(\forall x \varphi) \: &:= \: free(\varphi) \ {x} \\
+        free(\exists x \varphi) \: &:= \: free(\varphi) \ {x}
+    \end{align*}
+\end{definition}
+
+\begin{definition}{Sentences}
+    Formulas without free variables are called {\it sentences} \\
+    We denote:
+    \[
+        L_n^S \: := \: \{\varphi | \varphi \in L^S \: and \: free(\varphi) \subset \{ v_0,\dots,v_{n-1}\}\}
+    \]
+    In particular $L_0^S$ is the set of $S-sentences$.
+\end{definition}
+
+
+\section{Semantics of First-Order Languages}
+\subsection{Structures and Interpretations}
+
+\begin{definition}{S-Structure $\mathfrak{A}$ \page{36}}
+    An S-structure is a pair $\mathfrak{A} = (A,\mathfrak{a})$: 
+    \begin{itemize}
+        \item $A$ is a nonempty set, the {\it domain} of $\mathfrak{A}$.
+        \item $\mathfrak{a}$ is a map defined on $S$ satisfying:
+        \begin{enumerate}
+            \item for every n-ary relation symbol $R$ on $S$, $\mathfrak{a}(R)$ is an n-ary relation on $A$.
+            \item for every n-ary function symbol $f$ on $S$, $\mathfrak{a}(f)$ is an n-ary function on $A$>
+            \item for every constant $c$ in $S$, $\mathfrak{a}(f)$ is an element of $A$.
+        \end{enumerate}
+    \end{itemize}
+    \begin{freebox}{Example:}
+    \begin{multicols}{2}
+        In arithmetic, two symbol sets:
+        \begin{align*}
+            S_{ar} &:= \{ +, \cdot \:, 0, 1 \} \\
+            S_{ar}^< &:= \{ +,\cdot \:,0,1,< \} 
+        \end{align*}
+        are just symbols without meaning.
+    \columnbreak
+
+        Until we define the domain and the meaning of the symbols and build the structures:
+        \begin{align*}
+            \mathfrak{N} &:= \{ \mathbf{N}, +^{\mathbf{N}}, \cdot^{\mathbf{N}},0^{\mathbf{N}},1^{\mathbf{N}}\} \\
+            \mathfrak{N}^< &:= \{ \mathbf{N}, +^{\mathbf{N}}, \cdot^{\mathbf{N}},0^{\mathbf{N}},1^{\mathbf{N}},<^{\mathbf{N}}\}
+        \end{align*}
+    \end{multicols}
+    \end{freebox}
+\end{definition}
+
+\begin{definition}{Assignment $\beta$ \page{36}}
+    An {\it assignment} in an $S$-structure is a map $\beta: \{ v_n \: | \: n \in \mathbf{N} \} \rightarrow A$.
+\end{definition}
+
+\begin{definition}{S-interpretation $\mathfrak{I}$}
+    An $S$-interpretation is a pair $(\mathfrak{A}, \beta)$.
+\end{definition}
+
+\begin{freebox}{$\beta \frac{a}{x}$ and $\mathfrak{I} \frac{a}{x}$ \page{37}}
+    Given $a \in A, x \in S, y \in S$, and $\beta$ is an assignment in $\mathfrak{A}$. Let $\beta \frac{a}{x}$ be {\color{red}the assignment in $\mathfrak{A}$ which maps $x$ to $a$ and agrees with $\beta$ on all variables distinct from $x$}:
+    \[
+        \beta \frac{a}{x}(y) := %\left\{
+            \begin{cases}
+            \beta(y) \: &if \: y \neq x \\
+            a \: &if \: y=x
+            \end{cases}
+    \]
+    For $\mathfrak{I} = (\mathfrak{A},\beta)$ let $\mathfrak{I} \frac{a}{x} := (\mathfrak{A},\beta \frac{a}{x})$
+\end{freebox}
+
+\subsection{Standardization of Connectives}\page{38}
+
+\subsection{The Satisfaction Relation}
+
+\begin{definition}{$\mathfrak{I}(t)$}
+    \begin{itemize}
+        \item (a) For a variable $x$, $\mathfrak{I}{x} := \beta(x)$.
+        \item (b) For a constant $c$, $\mathfrak{I}(c) := c^{\mathfrak{A}}$.
+        \item (c) For n-ary function symbol $f \in S$, and terms $t_1,\dots,t_n$.
+        \[
+            \mathfrak{I}(ft_1 \dots t_n) := f^{\mathfrak{A}}(\mathfrak{I}(t_1)\dots \mathfrak{I}(t_n))
+        \]
+    \end{itemize}
+\end{definition}
+
+\begin{definition}{Satisfaction Relation $\vDash$}
+    \label{definition:satisfaction}
+    Satisfaction relation is a binary relation between {\color{orange}S-interpretation} and {\color{orange}S-formula}, which is a property in induction. \\
+    Also we say the left side is the {\it model} of the right side.
+    \begin{align*}
+        \mathfrak{I} \vDash t_1 \equiv t_2 \: &:iff \: \mathfrak{I}(t_1) \equiv \mathfrak{I}(t_2) \\
+        \mathfrak{I} \vDash Rt_1 \dots t_n \: &:iff \: R^{\mathfrak{I}}t_1 \dots t_n \\
+        \mathfrak{I} \vDash \lnot \varphi \: &:iff \: \text{not } \mathfrak{I} \vDash \mathfrak{I}(\varphi) \\
+        \mathfrak{I} \vDash \forall x \varphi \: &:iff \: \text{for all } a \in A, \mathfrak{I}\frac{a}{x} \vDash \varphi
+    \end{align*}
+Given a set $\mathbf{\Phi}$ of formulas, $\mathfrak{I}$ is a model of $\mathbf{\Phi}$ iff for all $\varphi \in \mathbf{\Phi}, \mathfrak{I} \vDash \varphi$.
+\end{definition}
+
+\subsection{The Consequence Relation}
+
+\begin{definition}{Consequence Relation \page{41}}
+    A relation between a set of formulas and one formula. We say $\varphi$ is a consequence of $\Phi$:
+    \[
+        \Phi \vDash \varphi \: :iff \: 
+    \]
+    Every interpretation which satisfies $\Phi$ is also a model of $\varphi$.
+\end{definition}
+
+\begin{definition}{Valid \page{42}}
+    A formula $\varphi$ is {\it valid} ($\vDash \varphi$) :iff $\emptyset \vDash \varphi$.
+\end{definition}
+
+\begin{definition}{Satisfiable}
+    A formula $\varphi$ is satisfiable(written Sat $ \varphi$) :iff there is an interpretation which is a model of $\varphi$. \\
+    A set of formulas $\Phi$ is satisfiable: Sat $\Phi$ iff there is an interpretation which is a model of all the formulas in $\Phi$.
+\end{definition}
+
+\begin{lemma}{}
+    For all $\Phi$ and all $\varphi$.
+    $\Phi \vDash \varphi$ {\it iff not} Sat $\Phi \cup \{ \lnot \varphi \}$.
+\end{lemma}
+
+\begin{definition}{Logically equivalent}
+    Logically equivalant :iff $\varphi \vDash \psi$ and  $\psi \vDash \varphi$
+\end{definition}
+
+\begin{freebox}{Example: Logically equivalant}
+    \begin{align*}
+        \varphi \land \psi \quad &and \quad \lnot(\lnot \varphi \lor \lnot \psi) \\
+        \varphi \rightarrow \psi \quad &and \quad \lnot \varphi \lor \psi \\
+        \varphi \leftrightarrow \psi \quad &and \quad \lnot(\varphi \land \psi) \lor \lnot(\lnot \varphi \lor \lnot \psi) \\
+        \forall x \varphi \quad &and \quad \lnot \exists x \lnot \varphi
+    \end{align*}
+\end{freebox}
+We can dispense with the connectives $\land, \rightarrow, \leftrightarrow, \forall$ with a map * by induction on formulas, which associates each formula $\varphi$ with an equivalent formula $\varphi^*$ which does not contain$\land, \rightarrow, \leftrightarrow, \forall$. \page{42}
+
+\begin{lemma}{Coincidence Lemma \page{43}}
+    \label{lemma:coincidence}
+    Let $\mathfrak{I}_1 = (\mathfrak{A_1}, \beta_1)$ be an $S_1-interpretation$, let $\mathfrak{I}_2 = (\mathfrak{A_2}, \beta_2)$ be an $S_2-interpretation$, both with the same domain $A_1 = A_2 = A$. Consider the symbol set $S = S_1 \cap S_2$.    
+    \begin{enumerate}
+        \item Let $t$ be an $S-term$. If $\mathfrak{I}_1$ and $\mathfrak{I}_2$ agree on the $S-symbols${\color{orange}($f,g,c$)} and the variables occurring in $t$, then $\mathfrak{I}_1(t)=\mathfrak{I}_2(t)$.
+        \item Let $\varphi$ be an $S-formula$. If $\mathfrak{I}_1$ and $\mathfrak{I}_2$ agree on the $S-symbols$ and the variables occurring {\color{orange}free} in $\varphi$, then $\mathfrak{I}_1 \vDash \varphi \; iff \; \mathfrak{I}_2 \vDash \varphi$.
+    \end{enumerate}
+    \begin{freebox}{Proof \page{44}}
+        For $\varphi = \exists x \psi, \mathfrak{I}_1 \vDash \varphi$
+
+        iff there is an $a \in A_1$ such that $\mathfrak{I}_1\frac{a}{x} \vDash \psi$
+
+        Because $\mathfrak{I}_1$ and $\mathfrak{I}_2$ agree on $free(\varphi)$ and, $free(\psi) \subset free(\varphi) \cup \{x\}$. Thus $\mathfrak{I}_1\frac{a}{x}$ and $\mathfrak{I}_2\frac{a}{x}$ agree on $S$ and $free(\psi)$.
+
+        iff there is an $a \in A_2$ such that $\mathfrak{I}_2 \frac{a}{x} \vDash \psi$.
+
+        iff $\mathfrak{I}_2 \vDash \exists x \varphi$.
+    \end{freebox}
+    If $\varphi \in L_n^S$, we shall write
+    \[
+        \mathfrak{A} \vDash \varphi[a_0,\dots,a_{n-1}]
+    \]
+    Instead of $(\mathfrak{A},\beta) \vDash \varphi$.
+    If $\varphi$ is a sentence.
+    \[
+        \mathfrak{A} \vDash \varphi
+    \]
+    We say $\mathfrak{A}$ is a {\it model of }$\varphi$.
+\end{lemma}
+
+\begin{definition}{S-reduct and expansion \page{45}}
+    Let $S$ and $S'$ be symbol sets such that $S \subset S'$. Let $\mathfrak{A}=(A,\mathfrak{a})$ be an $S-structure$ and $\mathfrak{A'}=(A',\mathfrak{a'})$ be an $S'-structure$. We say:
+
+    $\mathfrak{A}$ is a {\it reduct} of $\mathfrak{A'}$, or conversely {\it expansion} iff
+
+    $A=A'$ and $\mathfrak{a}$ and $\mathfrak{a'}$ agree on $S$. Writen 
+    \[
+        \mathfrak{A} = \mathfrak{A'}|_S
+    \]
+    \begin{freebox}{Example}
+        \[
+            \mathfrak{R} = \mathfrak{R}^< |_{S_{ar}}
+        \]
+        Check \ref{3.1.1}
+    \end{freebox}
+\end{definition}
+
+\begin{freebox}{Remark}
+    With the {\it coincidence lemma \ref{3.4.6}}, the symbol set $S$ need not be {\color{orange}fixed} when discussing interpretation, consequence and satisfiablility.
+\end{freebox}
+
+\begin{theorem}{\page{45}}
+    $\Phi$ is satisfiable {\color{red} with respect} to $S$ iff $\Phi$ is satisfiable with respect to $S'$.
+\end{theorem}
+
+\subsection{Two Lemmas on the Satisfaction Relation}
+
+\begin{definition}{Isomorphism \page{47}}
+    Let $\mathfrak{A}$ and $\mathfrak{b}$ be the $S-structures$.
+    A map $\pi: A \rightarrow B$ is called an {\it isomorphism} of $\mathfrak{A}$ onto $\mathfrak{B}$ (written: $\mathfrak{A} \cong \mathfrak{B}$)
+    \begin{enumerate}
+        \item $\pi$ is a {\color{orange}bijection} of $A$ onto $B$.
+        \item For n-ary $R \in S$ and $a_1,\dots,a_n \in A$.
+            \[
+                R^{\mathfrak{A}}a_1 \dots a_n \quad iff \quad R^{\mathfrak{B}} \pi(a_1) \dots \pi(a_n)
+            \]
+        \item For n-ary $f \in S$ and $a_1,\dots,a_n \in S$.
+            \[
+                \pi(f^{\mathfrak{A}} (a_1, \dots, a_n)) = f^{\mathfrak{B}} (\pi(a_1), \dots, \pi(a_n))
+            \] 
+        \item For $c \in S$, $\pi{c^{\mathfrak{A}}} = c^{\mathfrak{B}}$.
+    \end{enumerate}
+    $\mathfrak{A}$ and $\mathfrak{B}$ are said to be {\it isomorphic} iff there is an isomorphism $\pi:\mathfrak{A} \cong \mathfrak{B}$.
+
+    \begin{freebox}{Example}
+        The $S_{gr}-structure$ $(\mathbf{N},+,0)$ is isomorphic to the $S_{gr}-structure$ $(G,+^G,0)$, where $G$ consists of the even natural numbers. The map $\pi:\mathbf{N} \rightarrow G$ with $\pi(n) = 2n$ is an isomporphism.
+        Check \ref{1.1.1}
+    \end{freebox}
+\end{definition}
+
+\begin{lemma}{Isomorphism Lemma \page{47}}
+    \label{lemma:isomorphism}
+    If $\mathfrak{A}$ and $\mathfrak{B}$ are isomorphic $S-structures$, with every assignment $\beta$ in $\mathfrak{A}$ we associate the assignment $\beta^{\pi} := \pi \circ \beta$ in $\mathfrak{B}$, and for the corresponding interpretations $\mathfrak{I} = (\mathfrak{A},\beta)$ and $\mathfrak{I}^{\pi} = (\mathfrak{B}, \beta^{\pi})$, we have:
+    \begin{enumerate}
+        \item For every $S-term$ $t$,
+        \[
+            \pi( \mathfrak{I}(t) ) = \mathfrak{I}^{\pi}(t) 
+        \]
+        \item For every $S-formula$ $\varphi$,
+        \[
+            \mathfrak{I} \vDash \varphi \quad iff \quad \mathfrak{I}^{\pi} \vDash \varphi   
+        \]
+    \end{enumerate}
+    
+    In particular, for all $S-formulas \: \varphi$
+    \[
+        \mathfrak{A} \vDash \varphi \quad iff \quad \mathfrak{B} \vDash \varphi.
+    \]
+\end{lemma}
+
+\begin{freebox}{Remark}
+    To discuss the $structure$ differences(assignment not considered),
+    \begin{itemize}
+        \item The {\it coincidence lemma \ref{3.4.6}}: same domain $A$, different $S$, with the same $\mathfrak{a}$ and $\beta$(agreement on the intersection of $S$);
+        \item The {\it Isomorphism lemma \ref{3.5.2}}: different domain $A$ and $B$, the same $S$, also with the different $\mathfrak{a}$ and $\mathfrak{b}$. The bridge is isomorphism.
+    \end{itemize}
+    Both focus on the topic of {\it satisfaction, validity and consequence}.
+\end{freebox}
+
+
+\begin{corollary}{\page{48}}
+    If $\pi : \mathfrak{A} \cong \mathfrak{B}$, then for $\varphi \in L_n^S,\:and\: a_0,\dots,a_{n-1}$
+    \[
+        \mathfrak{A} \vDash \varphi[a_0,\dots,a_{n-1}] \quad iff \quad \mathfrak{B} \vDash \varphi[\pi(a_0),\dots,\pi(a_{n-1})]
+    \]
+\end{corollary}
+
+Isomorphic structures cannot be disguinshed in $L_0^S$.
+Conversely,
+\begin{freebox}{Example}
+    The $S_{ar}-structure$
+    \[
+        (\mathbf{Q},+,0) \vDash \forall v_0 \exists v_1 \: v_1 + v_1 \equiv v_0
+    \]
+    While in the integers this sentence no longer holds
+    \[
+        not \quad (\mathbf{Z},+,0) \vDash \forall v_0 \exists v_1 \: v_1 + v_1 \equiv v_0
+    \]
+\end{freebox}j
+In this case, sentences might not hold when passing to {\color{orange} substructures}.
+
+\begin{definition}{\color{red}Substructure \page{49}}
+    Let $\mathfrak{A}$ and $\mathfrak{B}$ be $S-structures$. We say $\mathfrak{A} \subset \mathfrak{B}$ if \\
+    (a) $A \subset B$.
+    (b)
+    \begin{enumerate}
+        \item For n-ary $R \in S$, for all $a_1,\dots,a_n \in A$, $R^{\mathfrak{A}} a_1 \dots a_n \quad iff \quad R^{\mathfrak{B}} a_1 \dots a_n$. Written as $R^{\mathfrak{A}} = R^{\mathfrak{B}} \cap A^n$.
+        \item For n-ary $f \in S$, $f^{\mathfrak{A}}$ is the restriction of $f^{\mathfrak{B}}$ to $A^n$.
+        \item For $c \in S, c^{\mathfrak{A}} = c^{\mathfrak{B}}$.
+    \end{enumerate}
+    \begin{freebox}{Remark:\it S-closed}
+        If $\mathfrak{A} \subset \mathfrak{B}$, then $A$ is $S-closed$;\\
+        Conversely, every $S-closed$ subset $X \subset B$ uniquely generates a substructure named $[X]^{\mathfrak{B}}$.
+    \end{freebox}
+\end{definition}
+
+\begin{lemma}{\page{49}}
+    Let $\mathfrak{A}$ and $\mathfrak{B}$ be $S-structures$ with $\mathfrak{A} \subset \mathfrak{B}$. Let $\beta :\{v_n \: | \: n\in \mathbf{N} \} \rightarrow A$ be an assignment in $\mathfrak{A}$. \\
+    Then for every $S-term \: t$:
+    \[
+        (\mathfrak{A},\beta)(t) = (\mathfrak{B},\beta)(t);
+    \]
+    For every {\color{red} quantifier-free } $S-formula \: \varphi$:
+    \[
+        (\mathfrak{A},\beta) \vDash \varphi \quad iff \quad (\mathfrak{B},\beta) \vDash \varphi.
+    \]
+\end{lemma}
+
+\begin{definition}{\color{red}Universal formulas}
+    \begin{itemize}
+        \item (i) $\frac{\qquad}{\varphi}$, if $\varphi$ is quantifier-free.
+        \item (ii) $\frac{\quad \varphi, \psi \quad}{\varphi * \psi}$. Where $*=\land,lor$.
+        \item (iii) $\frac{\varphi}{\forall x \varphi}$.
+    \end{itemize}
+\end{definition}
+
+\begin{lemma}{Substructure Lemma \page{50}}
+    Let $\mathfrak{A}$ and $\mathfrak{B}$ be $S-structures$ with $\mathfrak{A} \subset \mathfrak{B}$, and let $\varphi \in L_n^S$ be {\color{red}universal}. Then the following holds for all $a_0,\dots,a_{n-1} \in A$:
+    \[
+        \mathfrak{B} \vDash \varphi[a_0,\dots,a_{n-1}] \quad then \quad \mathfrak{A} \vDash \varphi[a_0,\dots,a_{n-1}]
+    \]
+    \begin{corollary}{}
+        If $\mathfrak{A} \subset \mathfrak{B}$, then for every {\color{red}universal sentence} $\varphi$:
+        \[
+            If \quad \mathfrak{B} \vDash \varphi \quad then \quad \mathfrak{A} \vDash \varphi.
+        \]
+    \end{corollary}
+\end{lemma}
+
+\subsection{Some Simple Formalizations}
+
+\begin{definition}{Equivalance Relations \page52}
+    \begin{align*}
+        &\forall x Rxx, \\
+        &\forall x \forall y (Rxy \rightarrow Ryx), \\
+        &\forall x \forall y \forall z ((Rxy \land Ryz) \rightarrow Rxz).
+    \end{align*}
+    See \ref{1.2.1}
+\end{definition}
+
+\begin{freebox}{Example: continuity \page{52}}
+\end{freebox}
+
+\begin{freebox}{Example: Cardinality Statements \page{53}}
+\end{freebox}
+
+\begin{freebox}{Example:The Theory of Orderings \page{53}}
+    A structure $\mathfrak{A}=(A,<^{\mathfrak{A}})$ is called an {\it ordering} if:
+    \[
+        \mathfrak{A} \vDash \Psi_{ord}
+        \begin{cases}
+                \forall x \lnot x<x, \\
+                \forall x \forall y \forall z ((x<y)\land (y<z) \rightarrow (x<z)), \\
+                \forall x \forall y (x<y \lor x \equiv y \lor y<x) \\
+        \end{cases}
+    \]
+    {\color{red}Partially defined ordering:}
+\end{freebox}
+
+\begin{freebox}{The Theory of Fields \page{54}}
+\end{freebox}
+
+\begin{freebox}{The Theory of Graphs}
+\end{freebox}
+
+\subsection{Some Remarks on Formalizability}
+    
+\begin{freebox}{Partial Functions \page{55}}
+    e.g. division in $\mathbf{R}$
+\end{freebox}
+
+\begin{freebox}{Many-Sorted Structures \page{55}}
+    e.g. the structure with two domains: scalar and vector space.
+\end{freebox}
+
+\begin{freebox}{\color{red}Limits of Formalizability \page{57}}
+    \begin{enumerate}
+        \item {\it Torsion Groups}.
+        \[
+            \forall x(x \equiv e \lor x \circ x \equiv e \lor (x \circ x)\circ x \equiv e \lor \dots)    
+        \]
+        This infinite formula cannot be formed by first-order language.
+        \item {\it Peano's Axioms}
+    \end{enumerate}
+\end{freebox}
+\begin{freebox}{Dedekind's Theorem}
+\end{freebox}
+
+\subsection{Substitution}
+
+\begin{definition}{Substitution for Terms \page{60}}
+    \begin{enumerate}
+        \item Variables.
+        \[
+            x \frac{t_0 \dots t_r}{x_0 \dots x_r}:=
+            \begin{cases}   
+                x \quad & if \: x\neq x_0,\dots,x_r \\
+                t_i \quad & if \: x=x_i
+            \end{cases}
+        \]
+        \item Constants.
+        \[
+            c \frac{t_0 \dots t_r}{x_0 \dots x_r}:= c.
+        \]
+        \item Functions.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}{Substitution for Formulas \page{60}}
+    (e) Suppose $x_{i_1},\dots,x_{i_s}$ are exactly the variables $x_i$ among $x_0,\dots,x_r$, such that
+    \[
+        x_i \in free(\exists x \varphi) \text{ and } x_i \neq t_i
+    \]
+    then set
+    \[
+        [\exists \varphi]\frac{t_0,\dots,t_r}{x_0,\dots,t_r} := \exists u \frac{t_{i_1} \dots t_{i_s} u}{x_{i_1} \dots x_{i_s} x}
+    \]
+    Where $u$ is the variable $x$ if $x$ does not occur in $t_{i_1} \dots t_{i_s}$; Otherwise $u$ is the first variable in $v_0,\dots$ which does not occur in $\varphi, t_{i_1},\dots,t_{i_s}$.
+\end{definition}
+
+\begin{definition}{$\mathfrak{I}\frac{a}{x}$}
+    Let $\mathfrak{I} = (\mathfrak{A},\beta)$ be an interpretation, $x_0,\dots,x_r$ be pairwise distinct and $a_0,\dots,a_r \in A$.
+    \[
+        \beta \frac{a_0 \dots a_r}{x_0 \dots x_r}(y) := 
+        \begin{cases}
+            \beta(y) \quad &if \: y \neq x_i (0 \leq i \leq r) \\
+            a_i \quad &if \: y=x_i
+        \end{cases}
+    \]
+
+    \[
+        \mathfrak{I} \frac{a_0 \dots a_r}{x_0 \dots x_r}:=(\mathfrak{A}, \beta{a_0 \dots a_r}{x_0 \dots x_r})
+    \]
+\end{definition}
+
+\begin{lemma}{Substitution Lemma \page{61}}
+    \label{lemma:substitution}
+    (a) For every term $t$:
+    \[
+        \mathfrak{I} \left( t \frac{t_0 \dots t_r}{x_0 \dots x_r} \right) = \mathfrak{I} \frac{\mathfrak{I}(t_0) \dots \mathfrak{I}(t_r)}{x_0 \dots x_r}(t)
+    \]
+    (b) For every formula $\varphi$:
+    \[
+        \mathfrak{I} \vDash \varphi \frac{t_0 \dots t_r}{x_0 \dots x_r}
+        \quad iff \quad 
+        \mathfrak{I} \frac{\mathfrak{I}(t_0) \dots \mathfrak{I}(t_r)}{x_0 \dots x_r} \vDash \varphi
+    \]
+    \begin{freebox}{Remark}
+        {\color{red}语法替换和语义替换是等价的？}
+    \end{freebox}
+\end{lemma}
+
+\begin{lemma}{\page{62}}
+    (a) For every permutation $\pi$ of $0,\dots,r$
+    \[
+        \varphi \frac{t_0 \dots t_r}{x_0 \dots x_r}
+        =
+        \varphi \frac{t_{\pi(0)} \dots t_{\pi(r)}} {{x_{\pi(0)} \dots x_{\pi(r)}}}
+    \]
+    (b) \\
+    (c)
+\end{lemma}
+
+\begin{corollary}{\page{63}}
+    Suppose $free(\varphi) \subset \{ x_0,\dots,x_r \}$, and $x_0,\dots,x_r$ are distinct. Then, for terms $t_0,\dots,t_r$ that $var(t_i) \subset \{ v_0,\dots,v_{n-1} \}$, we have
+    \[
+        \varphi \frac{t_0 \dots t_r}{x_0 \dots x_r} \in L_n^S.
+    \]
+    In particular, $\varphi \frac{c_0 \dots c_r}{x_0 \dots x_r}$ is a sentence.
+\end{corollary}
+
+\begin{definition}{Rank of a formula}
+    \begin{align*}
+        rk(\varphi) \quad &:=0 \quad if \varphi \text{ is atomic.} \\
+        rk(\lnot \varphi) \quad &:= rk(\varphi) + 1 \\
+        rk(\varphi \lor \psi) \quad &:= rk(\varphi) + rk(\psi) +1 \\
+        rk(\exists x \varphi) \quad &:= rk(\varphi) + 1
+    \end{align*}
+\end{definition}
+
+\begin{lemma}{Substitution and rank \page{64}}
+    \[
+        rk \left( \varphi \frac{t_0 \dots t_r}{x_0 \dots x_r} \right) = rk(\varphi)
+    \]
+\end{lemma}
+
+\section{A Sequent Calculus} \page{65} 
+
+
+\begin{freebox}{Some basic concepts}
+    If $S$ is a symbol set and $\Phi$ is a set of $S-sentences$(axioms?).
+    \begin{enumerate}
+        \item We note $\Phi^{\vDash}$ as the set of {\color{orange}S-sentences} which are consequences of $\Phi$.
+        \item Whether every sentence in $\Phi^{\vDash}$ can be proved from the axioms in $\Phi$?
+        \item Formal proofs can be regarded as {\color{orange}syntactic} operations on strings of symbols. Thus obtaining a {\it calculus} $\mathfrak{S}$.
+        \item Formally provable(syntactic) v.s. Consequence(semantic).
+    \end{enumerate}
+\end{freebox}
+
+\subsection{Sequent Rules}
+
+\begin{freebox}{Terminologies \page{66}}
+    \it
+    \begin{itemize}
+        \item Sequent: a nonempty set of formulas $\varphi_1,\dots \varphi_n$. Abbreviated as $\Gamma,\Delta,\dots$.
+        \item Antecedent: $\varphi_1,\dots,\varphi_n$.
+        \item Succedent: $\varphi$.
+        \item Sequent calculus $\mathfrak{S}$: rules to prove.
+        \item Derivable: formally provable. $\vdash \Gamma \varphi$.
+    \end{itemize}
+\end{freebox}
+
+\begin{definition}{Derivable}
+    A formula $\varphi$ is {\it derivable(formally provable)} from a set $\Phi$ of formulas(written: $\Phi \vdash \varphi$) \\
+    iff \\
+    There are finitely many formulas $\varphi_1,\dots,\varphi_n$ in $\Phi$ that $\vdash \varphi_1 \dots \varphi_n \varphi$.
+\end{definition}
+
+\begin{freebox}{Derivable v.s. Correct}
+    A sequent $\Gamma \varphi$ is correct if $\Gamma \vDash \varphi$, which is {\color{orange}semantic} and different from derivable.
+\end{freebox}
+
+\subsection{Structural Rules and Connective Rules}
+
+\begin{freebox}{Structure Rules \page{68}}
+
+\begin{multicols}{2}
+
+Antecedent Rule(Ant) 
+    \[
+        \frac{\Gamma \quad \varphi}{\Gamma' \quad \varphi} \quad if \quad \Gamma \subset \Gamma'
+    \]
+
+\columnbreak
+
+Assumption Rule(Assm)
+    \[
+        \frac{}{\Gamma \quad \varphi} \quad if \quad \varphi \in \Gamma
+    \]
+
+\end{multicols}
+
+\end{freebox}
+
+\begin{freebox}{Connective Rules}
+    \begin{multicols}{2}
+    Proof by Cases Rule(PC)
+        \[
+            \begin{array}{ccc}
+                \Gamma & \psi & \varphi \\
+                \Gamma & \lnot \psi & \varphi \\
+                \hline
+                \Gamma & & \varphi
+            \end{array}
+        \]
+    Contradiction Rule(Ctr)
+        \[
+            \begin{array}{ccc}
+                \Gamma & \lnot \varphi & \psi \\
+                \Gamma & \lnot \varphi & \lnot \psi \\   
+                \hline
+                \Gamma & & \varphi
+            \end{array}
+        \]
+    $\lor$-Rule for the Antecedent($\lor$A)
+        \[
+            \begin{array}{ccc}
+                \Gamma & \varphi & \chi \\
+                \Gamma & \psi & \chi \\
+                \hline
+                \Gamma & (\varphi \lor \psi) & \chi 
+            \end{array}
+        \]
+    \end{multicols}        
+
+    $\lor$-Rules for the Succedent($\lor$S)
+        \begin{multicols}{2}
+            (a) 
+            $
+            \begin{array}{cc}
+                \Gamma & \varphi \\
+                \hline
+                \Gamma & (\varphi \lor \psi)
+            \end{array}
+            $   
+
+        \columnbreak    
+
+            (b) 
+            $
+            \begin{array}{cc}
+                \Gamma & \varphi \\
+                \hline
+                \Gamma & (\psi \lor \varphi)
+            \end{array}
+            $   
+        \end{multicols}
+
+\end{freebox}
+
+\subsection{Derivable Connective Rules}
+
+\begin{freebox}{Derivable Connective Rules \page{70}}
+\begin{multicols}{2}
+    Second Contradiction Rule({\bf Ctr'} \page{70})
+    \[
+        \begin{array}{cc}
+            \Gamma & \psi \\
+            \Gamma & \lnot \psi \\
+            \hline
+            \Gamma & \varphi
+        \end{array}
+    \]
+    Chain Rule(Ch \page{70})
+    \[
+        \begin{array}{ccc}
+            \Gamma & & \varphi \\
+            \Gamma & \varphi & \psi \\
+            \hline
+            \Gamma & & \psi
+        \end{array}
+    \]
+    Contraposition Rules(Cp \page{70})
+    \[
+        \begin{array}{ccc}
+            \Gamma & \varphi & \psi \\
+            \hline 
+            \Gamma & \lnot \psi & \lnot \varphi \\
+        \end{array}
+    \]
+    Noname? \page{71}
+    \[
+        \begin{array}{cc}
+            \Gamma & (\varphi \lor \psi) \\
+            \Gamma & \lnot \varphi \\
+            \hline
+            \Gamma & \psi
+        \end{array}
+    \]
+    "Modus ponens".
+    \[
+        \begin{array}{cc}
+            \Gamma & (\varphi \rightarrow \psi) \\
+            \Gamma & \varphi \\
+            \hline
+            \Gamma & \psi
+        \end{array}
+    \]
+\end{multicols}
+\end{freebox}
+
+\subsection{Quantifier and Equality Rules}
+\begin{freebox}{Quantifier Rules}
+    \begin{multicols}{2}
+        $\exists \mathbf{S}$(\page{72})
+        \[
+            \begin{array}{cc}
+                \Gamma & \varphi \frac{t}{x} \\
+                \hline
+                \Gamma & \exists x \varphi
+            \end{array}
+        \]
+        {\it Correctness.} \\
+        \ref{lemma:substitution}(substitution lemma) \\
+        \ref{definition:satisfaction}(definition of satisfaction)
+
+    \columnbreak
+
+        $\exists \mathbf{A}$(\page{72})
+        \[
+            \begin{array}{ccc}
+                \Gamma & \varphi \frac{y}{x} & \psi \\
+                \hline
+                \Gamma & \exists x \varphi & \psi
+            \end{array}
+        \]
+        {\color{red}If $y$ is not free in $\Gamma \: \exists x \varphi \: \psi$}. \\
+        {\it Correctness.} \\
+        \ref{lemma:coincidence}(Coincidence Lemma)
+    \end{multicols}
+\end{freebox}
+
+\begin{freebox}{Equality Rules \page{73}}
+    \begin{multicols}{2}
+        Reflexivity Rule for Equality($\equiv$).
+        \[
+            \begin{array}{cc}
+                \hline
+                \Gamma & t \equiv t
+            \end{array}
+        \]
+
+    \columnbreak
+
+        Substitution Rule for Equality(Sub)
+        \[
+            \begin{array}{ccc}
+                \Gamma & & \varphi \frac{t}{x} \\
+                \hline
+                \Gamma & t \equiv t' & \varphi \frac{t'}{x}
+            \end{array}
+        \]
+    \end{multicols}
+\end{freebox}
+
+\subsection{Further Derivable Rules and Sequents}
+\begin{freebox}{\page{74}}
+    \begin{multicols}{2}
+        \[
+            (a)
+            \begin{array}{cc}
+                \Gamma & \varphi \\
+                \hline
+                \Gamma & \exists x \varphi
+            \end{array}
+        \]
+        \[
+            (b)
+            \begin{array}{ccc}
+                \Gamma & \varphi & \psi \\
+                \hline
+                \Gamma & \exists x \varphi & \psi
+            \end{array}
+        \]
+        if x is not free in $\Gamma \psi$
+    \end{multicols}
+\end{freebox}
+
+%\linkinclude{book_Ebbinghaus}{1-90}
+\end{document}

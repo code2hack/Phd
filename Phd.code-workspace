@@ -1,0 +1,205 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+
+			//Recipe for xeLatex
+			"latex-workshop.latex.recipes": [
+			  {
+				"name": "xelatex4notes",
+				"tools": [
+				  "xelatex",
+				  "xelatex"
+				]
+			  },
+			  {
+				"name": "nudt thesis",
+				"tools": [
+				  "xelatex",
+				  "bibtex",
+				  "bibtex",
+				  "xelatex",
+				  "xelatex"
+				]
+			  },
+			  {
+				"name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
+				"tools": [
+				  "pdflatex",
+				  "bibtex",
+				  "pdflatex",
+				  "pdflatex"
+				]
+			  },
+			  {
+				"name": "latexmk 🔃",
+				"tools": [
+				  "latexmk"
+				]
+			  },
+			  {
+				"name": "latexmk (latexmkrc)",
+				"tools": [
+				  "latexmk_rconly"
+				]
+			  }
+			],
+			"latex-workshop.latex.tools": [
+			  {
+				"name": "latexmk",
+				"command": "latexmk",
+				"args": [
+				  "-synctex=1",
+				  "-interaction=nonstopmode",
+				  "-file-line-error",
+				  "-pdf",
+				  "-outdir=%OUTDIR%",
+				  "%DOC%"
+				],
+				"env": {}
+			  },
+			  {
+				"name": "latexmk_rconly",
+				"command": "latexmk",
+				"args": [
+				  "%DOC%"
+				],
+				"env": {}
+			  },
+			  {
+				"name": "pdflatex",
+				"command": "pdflatex",
+				"args": [
+				  "-synctex=1",
+				  "-interaction=nonstopmode",
+		  
+				  "-outdir=%OUTDIR%",
+				  "-file-line-error",
+				  "%DOC%"
+				],
+				"env": {}
+			  },
+			  {
+				"name": "bibtex",
+				"command": "bibtex",
+				"args": [
+				  "%DOCFILE%"
+				],
+				"env": {}
+			  },
+			  {
+				"name": "xelatex",
+				"command": "xelatex",
+				"args": [
+				  "-synctex=1",
+				  "-interaction=nonstopmode",
+				  "-file-line-error",
+				  "-output-directory=%OUTDIR%",
+				  "%DOCFILE%"
+				]
+			  },
+			  
+			  {
+				"name": "sync2icloud",
+				"command": "cp",
+				"args": [
+				  "%DOCFILE%.pdf",
+				  "icloud/"
+				]
+			  }
+			],
+		  //  "latex-workshop.latex.outDir": ".",
+			"latex-workshop.synctex.afterBuild.enabled": true,
+		  //  "latex-workshop.synctex.path": ".",
+			"latex-workshop.latex.autoBuild.run": "onFileChange",
+			"latex-workshop.latex.clean.subfolder.enabled":true,
+			"latex-workshop.latex.autoClean.run": "onBuilt",
+			"latex-workshop.latex.clean.fileTypes": [
+			  "*.aux",
+			  "*.bbl",
+			  "*.blg",
+			  "*.idx",
+			  "*.ind",
+			  "*.lof",
+			  "*.lot",
+			  "*.out",
+			  "*.toc",
+			  "*.acn",
+			  "*.acr",
+			  "*.alg",
+			  "*.glg",
+			  "*.glo",
+			  "*.gls",
+			  "*.ist",
+			  "*.fls",
+			  "*.log",
+			  "*.fdb_latexmk"
+			  //    "*.synctex.gz"
+			],
+			"latex-workshop.view.pdf.viewer":"external",
+			"latex-workshop.view.pdf.ref.viewer":"external",
+			
+			"latex-workshop.view.pdf.external.viewer.command": "/Applications/Skim.app/Contents/SharedSupport/displayline",
+			"latex-workshop.view.pdf.external.viewer.args": [
+				"%PDF%"
+			],
+			
+			"latex-workshop.view.pdf.external.synctex.command": "/Applications/Skim.app/Contents/SharedSupport/displayline",
+			"latex-workshop.view.pdf.external.synctex.args": [
+				"%LINE%",
+				"%PDF%",
+				"%TEX%"
+			],
+			
+
+			"window.openFilesInNewWindow": "default",
+			"vim.normalModeKeyBindingsNonRecursive": [
+			  {
+				"before": [
+				  "q",
+				  "q"
+				],
+				"after": [
+				  ":",
+				  "q",
+				  "<CR>"
+				]
+			  },
+			],
+			"vim.insertModeKeyBindings": [
+			  {
+				"before": [
+				  "j",
+				  "j"
+				],
+				"after": [
+				  "<Esc>"
+				]
+			  }
+			],
+			"vim.visualModeKeyBindings": [
+			  {
+				"before": [
+				  "j",
+				  "j"
+				],
+				"after": [
+				  "<Esc>"
+				]
+			  }
+			],
+			"[c]": {
+			  "editor.defaultFormatter": "ms-vscode.cpptools"
+			},
+			"window.zoomLevel": 1,
+			"editor.wordWrap": "on",
+			"C_Cpp.updateChannel": "Insiders",
+			"workbench.editor.enablePreviewFromQuickOpen": false,
+			"languageTool.enabled": true,
+			"languageTool.language": "en",
+			"http.proxySupport": "off",
+		  }
+	}

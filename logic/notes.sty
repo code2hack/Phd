@@ -1,0 +1,261 @@
+%\NeedsTeXFormat{LaTeX2e}
+
+
+\ProvidesPackage{notes}[2019/09/29 code2hack]
+
+\RequirePackage[UTF8]{ctex}
+
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{dsfont}
+
+\RequirePackage{graphicx}
+
+\RequirePackage{multicol}
+\RequirePackage{pdfpages}
+\RequirePackage{verbatim}
+\RequirePackage{hyperref}
+\RequirePackage{natbib}
+\RequirePackage{grffile}
+\RequirePackage{listings}
+
+\RequirePackage{unicode-math}
+
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+\graphicspath{{./fig/}}
+\lstset{
+ columns=fixed,       
+ numbers=left,                                        % 在左侧显示行号
+ numberstyle=\tiny\color{gray},                       % 设定行号格式
+ frame=single,                                          % 不显示背景边框
+ keywordstyle=\color[RGB]{40,40,255},                 % 设定关键字颜色
+ numberstyle=\footnotesize\color{darkgray},           
+ commentstyle=\it\color[RGB]{0,96,96},                % 设置代码注释的格式
+ stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},   % 设置字符串格式
+ showstringspaces=true,                              % 显示字符串中的空格
+ language=c++,                                        % 设置语言
+}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+%--------Commands for local pdf reference------%
+\newcommand{\linkin}[2]{\hyperlink{./ref/#1.pdf.#2}{~p.#2}}
+\newcommand{\linkout}[2]{\href[page=#2]{./ref/#1.pdf}{~p.#2}}
+\newcommand{\linkinclude}[2]{\includepdf[link=true,pages=#2,fitpaper=true]{./ref/#1.pdf}}
+
+%--------Commands/Operators for math------%
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+%--------Environments for math------------%
+\usepackage[framemethod=TikZ]{mdframed}
+
+\newcounter{topic}[subsection]
+\renewcommand{\thetopic}{\arabic{section}.\arabic{subsection}.\arabic{topic}}
+% \newenvironment{definition}[1]{\refstepcounter{topic}\label{\thesubsection.\thetopic}\medskip
+% \noindent \textbf{Definition~\thesubsection.\thetopic~(#1)}\par }{ \medskip}
+% 
+% \newenvironment{theorem}[1]{\refstepcounter{topic}\label{\thesubsection.\thetopic}\medskip
+% \noindent \textbf{Theorem~\thesubsection.\thetopic~(#1)}\par \rmfamily }{\medskip}
+% 
+% \newenvironment{corollary}[1]{\refstepcounter{topic}\label{\thesubsection.\thetopic}\medskip
+% \noindent \textbf{Corollary~\thesubsection.\thetopic~(#1)}\par \rmfamily }{ \medskip}
+% 
+% \newenvironment{lemma}[1]{\refstepcounter{topic}\label{\thesubsection.\thetopic}\medskip
+% \noindent \textbf{Lemma~\thesubsection.\thetopic~(#1)}\par \rmfamily }{ \medskip}
+% 
+% \newenvironment{example}[1]{\refstepcounter{topic}\label{\thesubsection.\thetopic}\medskip
+%    \noindent \textbf{Example~\thesubsection.\thetopic~} \rmfamily }{ \medskip}
+% 
+% \newenvironment{remark}[1]{
+% \noindent \textbf{Remark~(#1)} \rmfamily }{ \medskip}
+% 
+% \newenvironment{proof}{\par\medskip \noindent \textit{Proof.}~\rmfamily}{\medskip}
+
+
+\newenvironment{theorem}[1]{
+    \refstepcounter{topic}
+    \label{\thetopic}
+    \ifstrempty{#1}
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Theorem~\thetopic};}
+        }
+    }
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Theorem~\thetopic:~{\it #1}};}
+        }
+    }
+    \mdfsetup{
+    innertopmargin=10pt,linecolor=blue!20,
+    linewidth=2pt,topline=true,
+    frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+    }
+ 
+    \begin{mdframed}[]\relax}{
+    \end{mdframed}
+}
+
+\newenvironment{definition}[1]{
+    \refstepcounter{topic}
+    \label{\thetopic}
+    \ifstrempty{#1}
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Definition~\thetopic};}
+        }
+    }
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Definition~\thetopic:~{\it #1}};}
+        }
+    }
+    \mdfsetup{
+    innertopmargin=10pt,linecolor=blue!20,
+    linewidth=2pt,topline=true,
+    frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+    }
+ 
+    \begin{mdframed}[]\relax}{
+    \end{mdframed}
+}
+
+\newenvironment{corollary}[1]{
+    \refstepcounter{topic}
+    \label{\thetopic}
+    \ifstrempty{#1}
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Corollary~\thetopic};}
+        }
+    }
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Corollary~\thetopic:~{\it #1}};}
+        }
+    }
+    \mdfsetup{
+    innertopmargin=10pt,linecolor=blue!20,
+    linewidth=2pt,topline=true,
+    frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+    }
+ 
+    \begin{mdframed}[]\relax}{
+    \end{mdframed}
+}
+
+\newenvironment{lemma}[1]{
+    \refstepcounter{topic}
+    \label{\thetopic}
+    \ifstrempty{#1}
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Lemma~\thetopic};}
+        }
+    }
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Lemma~\thetopic:~{\it #1}};}
+        }
+    }
+    \mdfsetup{
+    innertopmargin=10pt,linecolor=blue!20,
+    linewidth=2pt,topline=true,
+    frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+    }
+ 
+    \begin{mdframed}[]\relax}{
+    \end{mdframed}
+}
+
+
+
+
+\newenvironment{axiom}[1]{
+    \refstepcounter{topic}
+    \label{\thetopic}
+    \ifstrempty{#1}
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Axiom~\thetopic};}
+        }
+    }
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut Axiom~\thetopic:~{\it #1}};}
+        }
+    }
+    \mdfsetup{
+    innertopmargin=10pt,linecolor=blue!20,
+    linewidth=2pt,topline=true,
+    frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+    }
+ 
+    \begin{mdframed}[]\relax}{
+    \end{mdframed}
+}
+
+\newenvironment{freebox}[1]{
+    \ifstrempty{#1}
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut};}
+        }
+    }
+    {
+        \mdfsetup{
+            frametitle={
+            \tikz[baseline=(current bounding box.east),outer sep=0pt]
+            \node[anchor=east,rectangle,fill=blue!20]
+            {\strut #1};}
+        }
+    }
+    \mdfsetup{
+    innertopmargin=10pt,linecolor=blue!20,
+    linewidth=2pt,topline=true,
+    frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+    }
+ 
+    \begin{mdframed}[]\relax}{
+    \end{mdframed}
+}
+

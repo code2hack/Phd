@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{notes}
+\newcommand{\page}[1]{\linkout{book_Computer_Architecture}{#1}}
+
+\title{Computer Architecture}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Fundamentals of Quantitative Design and Analysis}
+\subsection{Introduction}
+
+\subsection{Classes of Computers}
+
+\subsubsection*{Classes of Parallelism and Parallel Architectures}
+
+\begin{enumerate}
+\item Basic classification:
+\begin{itemize}
+    \item Data-Level Parralelism.
+    \item Task-Level Parralelism.
+\end{itemize}
+
+\item Classification by exploitation:
+\begin{itemize}
+    \item Instruction-Level.
+    \item Vector Architectures and Graphic Processor Units.
+    \item Thread-Level(tightly coupled).
+    \item Request-Level(largely decoupled).
+\end{itemize}
+
+\item Classification by \textbf{\color{orange} instruction-stream}
+\begin{itemize}
+    \item SISD.
+    \item SIMD. Applying the same operations to multiple items of data in parallel. Mainly for DLP.
+    \item MISD. None.
+    \item MIMD. Mainly for task-levle parralelism.
+\end{itemize}
+
+\end{enumerate}
+
+\subsection{Defining Computer Architecture\page{40}}
+
+{\centering ISA(Instruction Set Architecture) \par}
+
+\begin{enumerate}
+    \item Class of ISA.
+        \begin{itemize}
+            \item \textit{register-memory}: 80x86.
+            \item \textit{load-store}: ARM, MIPS.
+        \end{itemize}
+    \item Memory addressing. \\
+    Byte addressing and alignment.\page{531}
+
+    \item Adressing modes. \\
+    Register, Immediate, and Displacement(variations).
+
+    \item Types and sizes of operands.
+
+    \item Operations.
+
+    \item Control flow instructions. \\
+    Conditional branches, unconditional jumps, procedure calls, returns.
+    \item Encoding an ISA. \\
+    Fixed length v.s. variable length.
+
+\end{enumerate}
+
+{\centering Designing the Organization and Hardware \par}
+
+\subsection{Trends in Technology}
+
+{\centering Performance Trends: Bandwidth over Latency \page{48} \par}
+
+
+\end{document}
